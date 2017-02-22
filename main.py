@@ -1,5 +1,14 @@
 import pyaudio
+import numpy as np
+from scipy.io.wavfile import write
 import wave
+
+def wavwrite(filepath, data, sr, norm=True, dtype='int16'):
+    if norm:
+        data /= np.max(np.abs(data))
+    data = data * np.iinfo(dtype).max
+    data = data.astype(dtype)
+    write(filepath, sr, data)
 
 CHUNK = 1024
 FORMAT = pyaudio.paInt16
@@ -18,11 +27,11 @@ stream = p.open(format=FORMAT,
 
 print("* recording")
 
-frames = []
+frames = np.array([])
 
 for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
     data = stream.read(CHUNK)
-    frames.append(data)
+    np.append(frames, data)
 
 print("* done recording")
 
