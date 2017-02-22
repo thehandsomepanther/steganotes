@@ -19,8 +19,8 @@ def make_sinewave(f, t, sr):
     return np.sin(vals)
 
 def encode(data_file):
-    signal = make_sinewave(900, 5, RATE)
-    spec = stft(signal, win_length=2048, hop_length=1024)
+    signal = make_sinewave(900, 100, RATE)
+    spec = stft(signal, 2048, 1024)
 
     with open(data_file) as dfile:
         d = dfile.read(1)
@@ -28,11 +28,11 @@ def encode(data_file):
         spec[0][20] = np.float64(os.path.getsize(data_file))/2**16
         while d:
             h = int(d.encode("hex"), 16)
-            spec[i][h] = np.max(np.abs(spec[i]) * 2)
+            spec[i][h] = np.max(np.abs(spec[i])) * 200
             d = dfile.read(1)
             i += 1
 
-    return istft(spec)
+    return istft(spec, 1024, 2048)
 
 
 wavwrite('encode.wav', encode('test.txt'), RATE)

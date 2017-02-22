@@ -1,4 +1,5 @@
 import scipy.signal as sig
+import librosa
 from librosa.core import stft
 from librosa.core import load
 import numpy as np
@@ -6,12 +7,19 @@ import numpy as np
 RATE = 44100
 
 def decode(wavfile):
-    signal, sr = load(wavfile, sr=RATE)
-    spec = stft(signal, win_length=2048, hop_length=1024)
+    signal, sr = librosa.load(wavfile, sr=44100)
+    spec = stft(signal, 2048, 1024)
     message = ""
 
-    for i in range(1, 844):
-        message += str(chr(np.argmax(np.abs(spec[i]))))
+    for i in range(1, 139):
+        h = np.argmax(np.abs(spec[i]))
+
+        while h > 256:
+            spec[i][h] = 0
+            h = np.argmax(np.abs(spec[i]))
+
+        char = str(chr(h))
+        message += char
     return message
 
 print decode('encode.wav')
