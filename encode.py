@@ -28,7 +28,7 @@ def encode(data_file):
         spec[0][20] = np.float64(os.path.getsize(data_file))/2**16
         while d:
             h = int(d.encode("hex"), 16)
-            spec[i][h] = np.abs(np.max(spec[i]))
+            spec[i][h] = np.max(np.abs(spec[i]) * 2)
             d = dfile.read(1)
             i += 1
 
@@ -36,3 +36,5 @@ def encode(data_file):
 
 
 wavwrite('encode.wav', encode('test.txt'), RATE)
+
+# https://solusipse.net/blog/post/basic-methods-of-audio-steganography-spectrograms/

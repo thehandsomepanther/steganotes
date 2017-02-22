@@ -12,7 +12,6 @@ def decode(wavfile):
 
     for i in range(1, 844):
         message += str(chr(np.argmax(np.abs(spec[i]))))
-        print np.argmax(np.abs(spec[i]))
     return message
 
 print decode('encode.wav')
