@@ -14,6 +14,14 @@ def make_sinewave(f, t, sr):
     vals = np.array([2 * np.pi * x * f / sr for x in range(int(sr * t))])
     return np.sin(vals)
 
+def add_start_stop(spectrogram):
+    delimiter = np.zeros((64, spectrogram.shape[0]))
+    for i in delimiter:
+        i[1000] = np.max(np.abs(spectrogram))
+
+    flipped = np.concatenate((delimiter, np.flipud(np.rot90(spectrogram)), delimiter))
+    return np.flipud(np.rot90(flipped))
+    
 def encode(data_file, output_file, key_file=None):
     reps = 1
     data_file_size = os.path.getsize(data_file)
@@ -39,6 +47,8 @@ def encode(data_file, output_file, key_file=None):
                 spec[h+1][i+r] = 0
             d = dfile.read(1)
             i += reps
+
+    spec = add_start_stop(spec)
 
     wavwrite(output_file, istft(spec, 1024, 2048), RATE)
 
