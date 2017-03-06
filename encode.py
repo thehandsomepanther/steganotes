@@ -19,7 +19,7 @@ def make_sinewave(f, t, sr):
     return np.sin(vals)
 
 def encode(data_file):
-    signal = make_sinewave(900, 100, RATE)
+    signal = make_sinewave(900, 5, RATE)
     spec = stft(signal, 2048, 1024)
 
     with open(data_file) as dfile:
@@ -29,8 +29,9 @@ def encode(data_file):
         while d:
             h = int(d.encode("hex"), 16)
             spec[i][h] = np.max(np.abs(spec[i])) * 200
+            spec[i+2][h] = np.max(np.abs(spec[i+2])) * 200
             d = dfile.read(1)
-            i += 1
+            i += 3
 
     return istft(spec, 1024, 2048)
 

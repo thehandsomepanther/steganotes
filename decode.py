@@ -11,7 +11,7 @@ def decode(wavfile):
     spec = stft(signal, 2048, 1024)
     message = ""
 
-    for i in range(1, 139):
+    for i in range(3, 1000, 3):
         h = np.argmax(np.abs(spec[i]))
 
         while h > 256:
