@@ -21,7 +21,7 @@ def decode(wavfile, key_file=None):
         spec = np.subtract(stft(key_signal, WINDOW_LENGTH, HOP_SIZE), spec)
         wavwrite('minus.wav', istft(spec, 1024, 2048), RATE)
 
-    for i in range(1, spec.shape[1]):
+    for i in range(0, spec.shape[1]):
         h = np.argmax(np.abs([spec[x][i] for x in range(spec.shape[0])]))
 
         while h > 256:

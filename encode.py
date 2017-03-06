@@ -31,11 +31,11 @@ def encode(data_file, output_file, key_file=None):
         while d:
             h = int(d.encode("hex"), 16)
             for r in range(reps):
-                spec[h-1][i+r] = 0
                 if key_file is not None:
                     spec[h][i+r] = np.max(np.abs([spec[x][i+r] for x in range(spec.shape[0])])) + 200
                 else:
                     spec[h][i+r] = np.max(np.abs([spec[x][i+r] for x in range(spec.shape[0])])) * 200
+                spec[h-1][i+r] = 0
                 spec[h+1][i+r] = 0
             d = dfile.read(1)
             i += reps
