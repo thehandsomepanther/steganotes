@@ -11,12 +11,12 @@ def decode(wavfile):
     spec = stft(signal, 2048, 1024)
     message = ""
 
-    for i in range(3, 1000, 3):
-        h = np.argmax(np.abs(spec[i]))
+    for i in range(1, 1000):
+        h = np.argmax(np.abs([spec[x][i] for x in range(spec.shape[0])]))
 
         while h > 256:
-            spec[i][h] = 0
-            h = np.argmax(np.abs(spec[i]))
+            spec[h][i] = 0
+            h = np.argmax(np.abs([spec[x][i] for x in range(spec.shape[0])]))
 
         char = str(chr(h))
         message += char
