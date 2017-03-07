@@ -29,6 +29,9 @@ def decode(wavfile, key_file=None):
             i=i+1
             continue
 
+        if h == 550:
+            break
+
         if decode:
             while h > 255:
                 spec[h][i] = 0

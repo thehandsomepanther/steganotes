@@ -15,12 +15,23 @@ def make_sinewave(f, t, sr):
     return np.sin(vals)
 
 def add_start_stop(spectrogram):
-    delimiter = np.zeros((64, spectrogram.shape[0]))
-    for i in delimiter:
-        i[500] = np.max(np.abs(spectrogram))
+    max_val = np.max(np.abs(spectrogram))
+    start = np.zeros((spectrogram.shape[0], 32))
+    stop = np.zeros((spectrogram.shape[0], 32))
 
-    flipped = np.concatenate((delimiter, np.flipud(np.rot90(spectrogram)), delimiter))
-    return np.flipud(np.rot90(flipped))
+    start[500] = np.full((32), max_val)
+    stop[550] = np.full((32), max_val)
+
+    # for i in range(start.shape[0]):
+    #     start[i][500] = max_val
+    #
+    # start = np.array([i[500]=max_val for i in np.zeros((32, spectrogram.shape[0]))])
+    # stop = np.array([i[550]=max_val for i in np.zeros((32, spectrogram.shape[0]))])
+    #
+    # flipped = np.concatenate((start, np.flipud(np.rot90(spectrogram)), stop))
+    # return np.flipud(np.rot90(flipped))
+
+    return np.concatenate((start, spectrogram, stop), axis=1)
 
 def encode(data_file, output_file, key_file=None):
     reps = 1
