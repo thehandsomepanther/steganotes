@@ -17,11 +17,11 @@ def make_sinewave(f, t, sr):
 def add_start_stop(spectrogram):
     delimiter = np.zeros((64, spectrogram.shape[0]))
     for i in delimiter:
-        i[1000] = np.max(np.abs(spectrogram))
+        i[500] = np.max(np.abs(spectrogram))
 
     flipped = np.concatenate((delimiter, np.flipud(np.rot90(spectrogram)), delimiter))
     return np.flipud(np.rot90(flipped))
-    
+
 def encode(data_file, output_file, key_file=None):
     reps = 1
     data_file_size = os.path.getsize(data_file)

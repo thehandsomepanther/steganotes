@@ -21,15 +21,38 @@ def decode(wavfile, key_file=None):
         spec = np.subtract(stft(key_signal, WINDOW_LENGTH, HOP_SIZE), spec)
         wavwrite('minus.wav', istft(spec, 1024, 2048), RATE)
 
-    for i in range(0, spec.shape[1]):
+    # for i in range(0, spec.shape[1]):
+    #     h = np.argmax(np.abs([spec[x][i] for x in range(spec.shape[0])]))
+    #
+    #     # start/stop delimiter
+    #     if h == 1000:
+    #         continue
+    #
+    #     while h > 256:
+    #         spec[h][i] = 0
+    #         h = np.argmax(np.abs([spec[x][i] for x in range(spec.shape[0])]))
+    #
+    #     char = str(chr(h))
+    #     message += char
+
+    i, decode = 0, False
+    while i < spec.shape[1]:
         h = np.argmax(np.abs([spec[x][i] for x in range(spec.shape[0])]))
 
-        while h > 256:
-            spec[h][i] = 0
-            h = np.argmax(np.abs([spec[x][i] for x in range(spec.shape[0])]))
+        if h == 500:
+            decode = True
+            i=i+1
+            continue
 
-        char = str(chr(h))
-        message += char
+        if decode:
+            while h > 255:
+                spec[h][i] = 0
+                h = np.argmax(np.abs([spec[x][i] for x in range(spec.shape[0])]))
+
+            char = str(chr(h))
+            message += char
+
+        i = i+1
 
     return message
 
