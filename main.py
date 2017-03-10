@@ -4,6 +4,7 @@ import sys
 from encode import encode
 from decode import decode
 from audio import *
+from listen import listen
 
 def main():
     # input flags for this program
@@ -21,8 +22,7 @@ def main():
         if options.play_audio:
             play_audio(output_file)
     elif options.listen:
-        captured_wav = listen_for_audio()
-        decode(captured_wav)
+        return listen()
     elif options.decode_file:
         decode(options.decode_file)
     else:
