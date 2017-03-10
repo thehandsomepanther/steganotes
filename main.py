@@ -1,19 +1,20 @@
 import pyaudio
 import wave
-
-# def wavwrite(filepath, data, sr, norm=True, dtype='int16'):
-#     if norm:
-#         data /= np.max(np.abs(data))
-#     data = data * np.iinfo(dtype).max
-#     data = data.astype(dtype)
-#     write(filepath, sr, data)
+import sys
+import select
+import tty
+import termios
+from decode import *
 
 CHUNK = 1024
 FORMAT = pyaudio.paInt16
 CHANNELS = 2
 RATE = 44100
-RECORD_SECONDS = 5
+RECORD_SECONDS = .5
 WAVE_OUTPUT_FILENAME = "output.wav"
+
+def isData():
+    return select.select([sys.stdin], [], [], 0) == ([sys.stdin], [], [])
 
 p = pyaudio.PyAudio()
 
@@ -23,20 +24,27 @@ stream = p.open(format=FORMAT,
                 input=True,
                 frames_per_buffer=CHUNK)
 
-print("* recording")
-
-# frames = np.array([])
 frames = []
 
-for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
-    data = stream.read(CHUNK)
-    frames.append (data)
+old_settings = termios.tcgetattr(sys.stdin)
+try:
+    tty.setcbreak(sys.stdin.fileno())
 
-print("* done recording")
+    print("* recording, press ESC to stop")
+    while True:
+        data = stream.read(CHUNK)
+        frames.append(data)
+        if isData():
+            c = sys.stdin.read(1)
+            if c == '\x1b':
+                print("* done recording")
+                stream.stop_stream()
+                stream.close()
+                p.terminate()
+                break
 
-stream.stop_stream()
-stream.close()
-p.terminate()
+finally:
+    termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
 
 wf = wave.open(WAVE_OUTPUT_FILENAME, 'wb')
 wf.setnchannels(CHANNELS)
@@ -44,3 +52,4 @@ wf.setsampwidth(p.get_sample_size(FORMAT))
 wf.setframerate(RATE)
 wf.writeframes(b''.join(frames))
 wf.close()
+print decode(WAVE_OUTPUT_FILENAME)

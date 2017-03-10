@@ -22,15 +22,6 @@ def add_start_stop(spectrogram):
     start[500] = np.full((32), max_val)
     stop[550] = np.full((32), max_val)
 
-    # for i in range(start.shape[0]):
-    #     start[i][500] = max_val
-    #
-    # start = np.array([i[500]=max_val for i in np.zeros((32, spectrogram.shape[0]))])
-    # stop = np.array([i[550]=max_val for i in np.zeros((32, spectrogram.shape[0]))])
-    #
-    # flipped = np.concatenate((start, np.flipud(np.rot90(spectrogram)), stop))
-    # return np.flipud(np.rot90(flipped))
-
     return np.concatenate((start, spectrogram, stop), axis=1)
 
 def encode(data_file, output_file, key_file=None):
@@ -41,7 +32,7 @@ def encode(data_file, output_file, key_file=None):
         signal, sr = librosa.load(key_file, sr=RATE)
         spec = stft(signal, WINDOW_LENGTH, HOP_SIZE)
     else:
-        signal = make_sinewave(900, data_file_size*reps/25, RATE)
+        signal = make_sinewave(900, data_file_size/41, RATE)
         spec = stft(signal, WINDOW_LENGTH, HOP_SIZE)
 
     with open(data_file) as dfile:
