@@ -18,8 +18,12 @@ def decode(wavfile, key_file=None):
     if key_file is not None:
         key_signal, sr = librosa.load(key_file, sr=RATE)
         signal = np.pad(signal, (0, key_signal.shape[0] - signal.shape[0]), 'edge')
-        spec = np.subtract(stft(key_signal, WINDOW_LENGTH, HOP_SIZE), spec)
-        wavwrite('minus.wav', istft(spec, 1024, 2048), RATE)
+        try:
+            spec = np.subtract(stft(key_signal, WINDOW_LENGTH, HOP_SIZE), spec)
+            wavwrite('minus.wav', istft(spec, 1024, 2048), RATE)
+        except ValueError:
+            print "Oops! Your encoded signal must be at least as long as the key signal"
+            return
 
     i, decode = 0, False
     while i < spec.shape[1]:
