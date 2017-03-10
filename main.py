@@ -1,46 +1,33 @@
-import pyaudio
-import wave
+from optparse import OptionParser
+import sys
 
-# def wavwrite(filepath, data, sr, norm=True, dtype='int16'):
-#     if norm:
-#         data /= np.max(np.abs(data))
-#     data = data * np.iinfo(dtype).max
-#     data = data.astype(dtype)
-#     write(filepath, sr, data)
+from encode import encode
+from decode import decode
+from audio import *
 
-CHUNK = 1024
-FORMAT = pyaudio.paInt16
-CHANNELS = 2
-RATE = 44100
-RECORD_SECONDS = 5
-WAVE_OUTPUT_FILENAME = "output.wav"
+def main():
+    # input flags for this program
+    parser = OptionParser()
+    parser.add_option("-e", "--encode", dest="encode_file", help="text file to with message to encode and send")
+    parser.add_option("-o", "--output", dest="output_file", help="output file with encoded audio")
+    parser.add_option("-d", "--decode", dest="decode_file", help="wav file to decode")
+    parser.add_option("-p", "--play", action="store_true", dest="play_audio", default=False, help="play audio after encoding text message")
+    parser.add_option("-l", "--listen", action="store_true", dest="listen", default=False, help="listen for audio signal and decode")
+    options, args = parser.parse_args()
 
-p = pyaudio.PyAudio()
+    if options.encode_file:
+        output_file = options.output_file if options.output_file else 'output.wav'
+        encode(options.encode_file, output_file)
+        if options.play_audio:
+            play_audio(output_file)
+    elif options.listen:
+        captured_wav = listen_for_audio()
+        decode(captured_wav)
+    elif options.decode_file:
+        decode(options.decode_file)
+    else:
+        parser.print_help()
+    return
 
-stream = p.open(format=FORMAT,
-                channels=CHANNELS,
-                rate=RATE,
-                input=True,
-                frames_per_buffer=CHUNK)
-
-print("* recording")
-
-# frames = np.array([])
-frames = []
-
-for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
-    data = stream.read(CHUNK)
-    frames.append (data)
-
-print("* done recording")
-
-stream.stop_stream()
-stream.close()
-p.terminate()
-
-wf = wave.open(WAVE_OUTPUT_FILENAME, 'wb')
-wf.setnchannels(CHANNELS)
-wf.setsampwidth(p.get_sample_size(FORMAT))
-wf.setframerate(RATE)
-wf.writeframes(b''.join(frames))
-wf.close()
+if __name__ == "__main__":
+    main()

@@ -22,18 +22,10 @@ def add_start_stop(spectrogram):
     start[500] = np.full((32), max_val)
     stop[550] = np.full((32), max_val)
 
-    # for i in range(start.shape[0]):
-    #     start[i][500] = max_val
-    #
-    # start = np.array([i[500]=max_val for i in np.zeros((32, spectrogram.shape[0]))])
-    # stop = np.array([i[550]=max_val for i in np.zeros((32, spectrogram.shape[0]))])
-    #
-    # flipped = np.concatenate((start, np.flipud(np.rot90(spectrogram)), stop))
-    # return np.flipud(np.rot90(flipped))
-
     return np.concatenate((start, spectrogram, stop), axis=1)
 
 def encode(data_file, output_file, key_file=None):
+    print '* * encoding message in audio file...'
     reps = 1
     data_file_size = os.path.getsize(data_file)
 
