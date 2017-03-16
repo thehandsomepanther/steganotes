@@ -31,9 +31,9 @@
   // this is not the actual code, but it gives you a good idea of what's going on
   t = 0
   for byte in datafile:
-  bin = byte.getDecimalValue()
-  spec[bin][t] = np.max(np.abs([spec[x][t] for x in range(spec.shape[0])])) * 200
-  t += 1
+    bin = byte.getDecimalValue()
+    spec[bin][t] = np.max(np.abs([spec[x][t] for x in range(spec.shape[0])])) * 200
+    t += 1
             </pre>
           </div>
         </div>
