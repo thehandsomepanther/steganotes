@@ -14,26 +14,26 @@
     <div class="pa3 ph5-ns">
       <div class="mw9 center">
         <div class="cf pb4">
-          <div class="fl w-30 pr4">
+          <div class="fl w-100 w-third-ns pr4">
             <p class="measure f5 lh-copy">This project takes inspiration from <a href="https://chrome.google.com/webstore/detail/google-tone/nnckehldicaciogcbchegobnafnjkcne?hl=en">Google Tone</a> and <a href="https://en.wikipedia.org/wiki/Dial-up_Internet_access">dial-up Internet</a>, both of which use audio tones to transfer data (in the case of Google Tone, it's to share a URL).</p>
           </div>
-          <div class="fl w-30 pr4">
+          <div class="fl w-100 w-third-ns pr4">
             <p class="measure f5 lh-copy">Steganotes goes one step further and investigates if we can transfer data of arbitrary length over-the-air using those same underlying principles.</p>
           </div>
         </div>
         <div class="cf">
           <h1 class="mt0 f5 f3-ns">How it Works</h1>
-          <div class="fl w-30 pr4">
+          <div class="fl w-100 w-third-ns pr4">
               <p class="measure f5 lh-copy">To encode data in an audio signal, you just have to provide the data you'd like to transfer. Steganotes will compute the spectrogram of the signal (by default, a sinewave) and step through it in the time domain, maxing out the frequency bin specified by the decimal value of the byte.</p>
           </div>
-          <div class="fl w-70 pr2">
+          <div class="fl w-100 w-two-thirds-ns pr2">
             <pre class="overflow-scroll pa4 bg-black white br2">
-  // this is not the actual code, but it gives you a good idea of what's going on
-  t = 0
-  for byte in datafile:
-    bin = byte.getDecimalValue()
-    spec[bin][t] = np.max(np.abs([spec[x][t] for x in range(spec.shape[0])])) * 200
-    t += 1
+// this is not the actual code, but it gives you a good idea of what's going on
+t = 0
+for byte in datafile:
+  bin = toDecimal(byte)
+  spec[bin][t] = a number higher than the max value in spec[:][t]
+  t += 1
             </pre>
           </div>
         </div>
