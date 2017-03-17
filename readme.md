@@ -14,6 +14,8 @@ pip install -r requirements.txt
 
 to activate your virtual environment:
 ```
+export WORKON_HOME=~/Envs
+source /usr/local/bin/virtualenvwrapper.sh
 workon steganotes
 ```
 
