@@ -28,11 +28,14 @@ def main():
         decode(options.decode_file)
     elif options.encode_message:
         message = raw_input("Type your message: ")
-        output_file = "temp.wav"
+        output_file = "output.wav"
         text_file = open("temp.txt", "w")
         text_file.write(message)
         text_file.close()
         encode("temp.txt", output_file)
+        print "Done! Your audio file is available at 'output.wav'."
+        if options.play_audio:
+            play_audio(output_file)
     else:
         parser.print_help()
     return
