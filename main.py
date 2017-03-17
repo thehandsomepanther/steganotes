@@ -33,7 +33,7 @@ def main():
         text_file.write(message)
         text_file.close()
         encode("temp.txt", output_file)
-        print "Done! Your audio file is available at 'output.wav'."
+        print "* * done! Your audio file is available at 'output.wav'."
         if options.play_audio:
             play_audio(output_file)
     else:
