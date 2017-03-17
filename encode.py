@@ -32,7 +32,7 @@ def encode(data_file, output_file, key_file=None):
         signal, sr = librosa.load(key_file, sr=RATE)
         spec = stft(signal, WINDOW_LENGTH, HOP_SIZE)
     else:
-        signal = make_sinewave(900, math.ceil(data_file_size/20.), RATE)
+        signal = make_sinewave(1, math.ceil(data_file_size/20.), RATE)
         spec = stft(signal, WINDOW_LENGTH, HOP_SIZE)
 
     print 'data file size:', data_file_size
