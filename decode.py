@@ -11,6 +11,7 @@ WINDOW_LENGTH = 2048
 HOP_SIZE = 1024
 
 def decode(wavfile, key_file=None):
+    print '* decoding signal'
     signal, sr = librosa.load(wavfile, sr=RATE)
     spec = stft(signal, WINDOW_LENGTH, HOP_SIZE)
     message = ""
@@ -45,6 +46,7 @@ def decode(wavfile, key_file=None):
 
         i = i+1
 
+    print message
     return message
 
 def main():

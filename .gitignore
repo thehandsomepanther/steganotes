@@ -3,4 +3,5 @@
 *.m4a
 *.mp3
 *.pyc
+temp.txt
 !encode.wav

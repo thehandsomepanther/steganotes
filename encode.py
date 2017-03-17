@@ -32,8 +32,11 @@ def encode(data_file, output_file, key_file=None):
         signal, sr = librosa.load(key_file, sr=RATE)
         spec = stft(signal, WINDOW_LENGTH, HOP_SIZE)
     else:
-        signal = make_sinewave(900, math.ceil(data_file_size/20.), RATE)
+        signal = make_sinewave(1, math.ceil(data_file_size/20.), RATE)
         spec = stft(signal, WINDOW_LENGTH, HOP_SIZE)
+
+    print 'data file size:', data_file_size
+    print 'spec shape', spec.shape
 
     with open(data_file) as dfile:
         d = dfile.read(1)
@@ -48,13 +51,9 @@ def encode(data_file, output_file, key_file=None):
             spec[h+1][i] = 0
             d = dfile.read(1)
             i += 1
-
     spec = spec[:,:i]
-
     spec = add_start_stop(spec)
-
     wavwrite(output_file, istft(spec, 1024, 2048), RATE)
-
 
 def main():
     if len(sys.argv) == 4:
