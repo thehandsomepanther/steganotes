@@ -4,6 +4,7 @@ from librosa.core import istft
 from librosa.core import stft
 import os
 import sys
+import math
 from wavwrite import *
 
 RATE = 44100
@@ -31,7 +32,7 @@ def encode(data_file, output_file, key_file=None):
         signal, sr = librosa.load(key_file, sr=RATE)
         spec = stft(signal, WINDOW_LENGTH, HOP_SIZE)
     else:
-        signal = make_sinewave(900, data_file_size/20, RATE)
+        signal = make_sinewave(900, math.ceil(data_file_size/20.), RATE)
         spec = stft(signal, WINDOW_LENGTH, HOP_SIZE)
 
     with open(data_file) as dfile:
