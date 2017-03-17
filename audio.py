@@ -1,5 +1,4 @@
 import pyaudio
-import pygame
 import sys
 import wave
 
@@ -9,7 +8,6 @@ CHANNELS = 2
 RATE = 44100
 RECORD_SECONDS = 5
 WAVE_OUTPUT_FILENAME = "captured_output.wav"
-
 
 def play_audio(wav_file):
     print '* * playing audio...'
