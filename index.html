@@ -41,7 +41,7 @@
         <div class="cf pb4">
           <h1 class="mt0 f5 f3-ns">How it Works</h1>
           <div class="fl w-100 w-third-l pr4">
-              <p class="measure f5 lh-copy">The encoding function Steganotes uses takes in two parameters: 1) a file (e.g. a text file) and 2) an optional pre-existing wav file in which the data will be encoded (if you do not provide a wav file, a simple sine wave will be generated and used instead).</p>
+            <p class="measure f5 lh-copy">The encoding function Steganotes uses takes in two parameters: 1) a file (e.g. a text file) and 2) an optional pre-existing wav file in which the data will be encoded (if you do not provide a wav file, a simple sine wave will be generated and used instead).</p>
             <p class="measure f5 lh-copy">To begin the encoding process, Steganotes first generates a spectrogram of the signal into which the data will be encoded. It steps through the indices in the time domain of that spectrogram and, for each time index <code>i</code>, gets the <code>i</code>th byte of the data. It then coverts that byte into its decimal value and maxes out the corresponding frequency bin. In this way, each byte has a one-to-one mapping to a frequency bin.</p>
             <p class="measure f5 lh-copy">The signal is also concatenated with signals that indicate where the message begins and ends.</p>
             <p class="measure f5 lh-copy">The decoding process is then relatively straightforward. Steganotes takes in a recorded signal, generates a spectrogram of it, and steps through the time domain until it finds the start signal. Then it looks through the signal and records the index of the frequency bin with the highest value. This index is then converted back to the corresponding hex character.</p>
@@ -58,6 +58,9 @@ def encode(data_file):
     bin = toDecimal(byte)
     spec[bin][i] = a number higher than the max value in spec[:][i]
     i += 1
+
+  encoded_signal = istft(spec)
+  concat(START_SIGNAL, encoded_signal, STOP_SIGNAL)
 
 def decode(wavfile):
   signal = load(wavfile)
@@ -87,6 +90,7 @@ def decode(wavfile):
         <h1 class="mt0 f5 f3-ns">Results</h1>
         <div class="fl w-100 w-third-l pr4">
             <p class="measure f5 lh-copy">We tested the system by encoding data into a wav file and playing it through a pair of laptop speakers (13" 2017 Macbook Pro) while another laptop (15" 2014 Macbook Pro) listened for the signal and decoded it once it was received. The message encoded was "The quick brown fox jumped over the lazy dog".</p>
+            <p class="measure f5 lh-copy">The following results were from tests performed in an open room with little to no background noise. The sending laptop had its volume at about 3/4 of its maximum. High-level tests with simulated background noise (<a href="https://www.youtube.com/watch?v=BOdLmxy06H0">coffee shop background noise</a>) found no significant effect on performance because the frequency bins modified are outside the range of typical background noise. However, when we performed high-level tests consisting of a few distinct voices, we found that decoding performace fell.</p>
         </div>
         <div class="fl w-100 w-two-thirds-l overflow-scroll">
           <table class="collapse ba br2 b--black-10 pv2 ph3 mt4">
@@ -128,6 +132,7 @@ def decode(wavfile):
               </tr>
             </tbody>
           </table>
+          <img class="mt4" src="graph.png" alt="">
         </div>
       </div>
       <div class="cf pb4">
